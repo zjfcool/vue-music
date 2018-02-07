@@ -1,0 +1,12 @@
+.textOverflow(){
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.arrowRignt(@w:6px,@h:6px,@borderColor:#b2b2b2){
+    width: @w;
+    height: @h;
+    border-right: 1px solid @borderColor;
+    border-bottom: 1px solid @borderColor;
+    transform: rotate(-45deg);
+}
