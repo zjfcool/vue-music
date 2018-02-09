@@ -6,7 +6,7 @@
             <ul class="rec-list">
                 <li class="rec-item" v-for="(item,index) in recList" :key="index">
                     <div class="left-item">
-                            <a class="img_container" href="">
+                            <a class="img_container" href="javascript:void(0);">
                                 <img v-lazy="item.cover" alt="">
                             </a>
                     </div>
@@ -132,7 +132,6 @@
                     flex: 1;
                     text-align: left;
                     padding:12px 14px 0 8px;
-                    // .textOverflow; 
                 }
             }
             .arrow-right{

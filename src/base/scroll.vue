@@ -17,6 +17,13 @@
                 default:1
             },
             /**
+             * 是否实时监听滚动
+             */
+            listenScroll: {
+                type: Boolean,
+                default: false
+            },
+            /**
              * 点击列表是否派发click事件
              */
             click:{
@@ -40,12 +47,17 @@
                 if(!this.$refs.scroll){
                     return;
                 }
-                
                 this.scroll = new BScroll(this.$refs.scroll,{
                     probeType:this.probeType,
                     click:this.click
                 })
-                console.log(this.scroll)
+                if(this.listenScroll){
+                    let that=this;
+                    this.scroll.on('scroll',(pos)=>{
+                        that.$emit('scroll',pos);
+                    })
+                }
+                // console.log(this.scroll)
             },
             refresh(){
                 this.scroll&&this.scroll.refresh();
@@ -55,6 +67,12 @@
             },
             disable(){
                 this.scroll&&this.scroll.disable();
+            },
+            scrollTo(){
+                this.scroll&&this.scroll.scrollTo.apply(this.scroll,arguments);
+            },
+            scrollToElement(){
+                this.scroll&&this.scroll.scrollToElement.apply(this.scroll,arguments);
             }
         },
         watch:{

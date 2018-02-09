@@ -5,6 +5,7 @@ import FastClick from 'fastclick'
 import VueResource from 'vue-resource'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import VueLazyLoad from 'vue-lazyload'
+import store from './store'
 import 'animate.css'
 
 Vue.config.productionTip = false;
@@ -24,5 +25,6 @@ Vue.filter('initNum',(val)=>{
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 })

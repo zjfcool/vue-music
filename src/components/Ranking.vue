@@ -1,34 +1,38 @@
 <template>
-  <scroll class="rank-wrapper" :data="rankData">
-      <ul class="rank-list">
-          <li v-for="rankItem in rankData" :key="rankItem.id" class="rank-item">
-              <div class="left_item">
-                  <a href="">
-                      <img v-lazy="rankItem.picUrl" alt="">
-                      <span>
-                          <i></i>
-                          {{rankItem.listenCount|initNum}}
-                      </span>
-                  </a>
-              </div>
-              <div class="right_item">
-                  <div>
-                    <h3>{{rankItem.topTitle}}</h3>
-                    <p v-for="(songList,index) in rankItem.songList" :key="index">
-                        <span>{{index+1}}</span>
-                        <span class="music-name">{{songList.songname}}</span>
-                        <span class="singer-name">{{songList.singername}}</span>
-                    </p>
-                  </div>
-                  <i class="arrow-right"></i>
-              </div>
-          </li>
-      </ul>
-  </scroll>
+  <div>
+        <scroll class="rank-wrapper" :data="rankData">
+            <ul class="rank-list">
+                <li @click="detailRanking(rankItem.id)" v-for="rankItem in rankData" :key="rankItem.id" class="rank-item">
+                    <div class="left_item">
+                        <a href="javascript:void(0);">
+                            <img v-lazy="rankItem.picUrl" alt="">
+                            <span>
+                                <i></i>
+                                {{rankItem.listenCount|initNum}}
+                            </span>
+                        </a>
+                    </div>
+                    <div class="right_item">
+                        <div>
+                            <h3>{{rankItem.topTitle}}</h3>
+                            <p v-for="(songList,index) in rankItem.songList" :key="index">
+                                <span>{{index+1}}</span>
+                                <span class="music-name">{{songList.songname}}</span>
+                                <span class="singer-name">{{songList.singername}}</span>
+                            </p>
+                        </div>
+                        <i class="arrow-right"></i>
+                    </div>
+                </li>
+            </ul>
+        </scroll>
+        <router-view>
+        </router-view>
+  </div>
 </template>
 <script>
     import {ERR_OK} from '../api/config'
-    import getRanking from '../api/ranking'
+    import {getRanking,getChildRanking} from '../api/ranking'
     import Scroll from '../base/scroll'
     export default{
         data(){
@@ -50,6 +54,16 @@
                   }
               },err=>{
                   console.log(err)
+              })
+          },
+          detailRanking(id){
+              this.$router.push({
+                  path:'/ranking/details'
+              })
+              getChildRanking(id).then(res=>{
+                  console.log(res.body)
+              },err=>{
+                  console.log(err);
               })
           }  
         }

@@ -16,9 +16,11 @@
 </script>
 <style lang="less" scoped>
     .loading{
+        width: 100%;
+        text-align: center;
+        background: rgba(0,0,0,0.55);
         img{
             width: 32px;
-            // height: 32px;
         }
         p{
             text-align: center;

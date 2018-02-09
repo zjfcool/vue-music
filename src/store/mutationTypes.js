@@ -1,0 +1,1 @@
+export const SINGER_LIST='SINGER_LIST'
