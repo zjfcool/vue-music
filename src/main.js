@@ -19,6 +19,11 @@ FastClick.attach(document.body);
 Vue.filter('initNum',(val)=>{
   return val>10000?(Math.round(val/1000)/10)+'万':val;
 });
+Vue.filter('initTimer',(val)=>{
+  let min =val/60|0;
+  let sec = Math.floor(val%60);
+  return min+":"+(sec>=10?sec:(sec===0?'00':'0'+sec));
+})
 
 
 /* eslint-disable no-new */

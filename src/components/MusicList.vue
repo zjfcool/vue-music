@@ -9,12 +9,11 @@
             </div>
         </div>
         <div class="bg-header" :style="bgStyle" ref="header">
-            <div class="play" ref="play">
+            <div class="play" @click="randomPlayList" ref="play">
                 <span class="icon-play3"></span>
                 <span>随机播放全部歌曲</span>
             </div>
             <div class="filter" ref="filter">
-
             </div>
         </div>
         <div class="layer" ref="layer"></div>
@@ -25,7 +24,7 @@
             :data="data" 
             :listenScroll="listenScroll"
             ref="scroll">
-            <song-list :songs="data"></song-list>
+            <song-list :songs="data" @select="selectSong"></song-list>
             <div v-show="!data.length" class="loading-container">
                 <loading></loading>
             </div>
@@ -37,10 +36,13 @@
     import SongList from '../base/songlist'
     import dom from '../assets/js/dom'
     import Loading from '../base/loading/index'
+    import {mapActions} from 'vuex'
+    import {playListMixin} from '../assets/js/mixin'
     const RESET_HEIGHT=30;
     const transform=dom.compBrowser('transform');
     const backdrop=dom.compBrowser('backdrop');
     export default{
+        mixins:[playListMixin],
         created(){
             this.probeType=3;
             this.listenScroll=true;
@@ -54,7 +56,7 @@
             bgStyle(){
                 return `background:url(${this.bgImage}) no-repeat top;
                         background-size:100% auto;`
-            }
+            },
         },
         props:{
             data:{
@@ -76,12 +78,32 @@
             }
         },
         methods:{
+            handlePlaylist(playlist){
+                const bottom = playlist>0?'48px':'';
+                this.$refs.scroll.$el.style.bottom=bottom;
+                this.$refs.scroll.refresh();
+            },
             back(){
                 this.$router.back();
             },
             scroll(pos){
                 this.scrollY=pos.y;
-            }
+            },
+            selectSong(item,index){
+                this.selectPlay({
+                    list:this.data,
+                    index
+                })
+            },
+            randomPlayList(){
+                this.randomPlay({
+                    list:this.data
+                })
+            },
+            ...mapActions([
+                'selectPlay',
+                'randomPlay'
+            ])
         },
         watch:{
             scrollY(newY){

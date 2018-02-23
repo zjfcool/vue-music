@@ -1,27 +1,29 @@
 <template>
-  <scroll :data="recList" ref="recommendContainer" class="recommend-container">
-      <div>
-            <slider @load-image="loadImage" :sliderData="sliderData" ></slider>
-            <h3 class="song_title">热门歌曲推荐</h3>
-            <ul class="rec-list">
-                <li class="rec-item" v-for="(item,index) in recList" :key="index">
-                    <div class="left-item">
-                            <a class="img_container" href="javascript:void(0);">
-                                <img v-lazy="item.cover" alt="">
-                            </a>
-                    </div>
-                    <div class="right-item">
-                        <p>{{item.title}}</p>
-                        <p>{{item.listen_num|initNum}}</p>
-                    </div>
-                    <i class="arrow-right"></i>
-                </li>
-            </ul>
-            <div class="loading-container" v-show="!recList.length">
-                <loading></loading>
-            </div>
-      </div>
-  </scroll>
+  <div class="recommond" ref="recommond">
+    <scroll :data="recList" ref="recommendContainer" class="recommend-container">
+        <div>
+                <slider @load-image="loadImage" :sliderData="sliderData" ></slider>
+                <h3 class="song_title">热门歌曲推荐</h3>
+                <ul class="rec-list">
+                    <li class="rec-item" v-for="(item,index) in recList" :key="index">
+                        <div class="left-item">
+                                <a class="img_container" href="javascript:void(0);">
+                                    <img v-lazy="item.cover" alt="">
+                                </a>
+                        </div>
+                        <div class="right-item">
+                            <p>{{item.title}}</p>
+                            <p>{{item.listen_num|initNum}}</p>
+                        </div>
+                        <i class="arrow-right"></i>
+                    </li>
+                </ul>
+                <div class="loading-container" v-show="!recList.length">
+                    <loading></loading>
+                </div>
+        </div>
+    </scroll>
+  </div>
 </template>
 <script>
     import Slider from '../base/slider'
@@ -29,8 +31,10 @@
     import {getRecommend,getRecList} from '../api/recommend'
     import Scroll from '../base/scroll'
     import Loading from '../base/loading/index'
+    import {playListMixin} from '../assets/js/mixin'
     export default {
         name:'Recommend',
+        mixins:[playListMixin],
         data(){
             return {
                 sliderData:[],
@@ -47,6 +51,11 @@
             this._jsonpRecList();
         },
         methods:{
+            handlePlaylist(playlist){
+                const bottom = playlist.length>0?'48px':'';
+                this.$refs.recommond.style.bottom=bottom;
+                this.$refs.recommendContainer.refresh();
+            },
             _jsonpRecommend(){
                 getRecommend().then(res=>{
                     if(res.body.code===ERR_OK){
@@ -74,8 +83,14 @@
 <style lang="less" scoped>
     @import '../assets/css/variable.less';
     @import '../assets/css/func.less';
+    .recommond{
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+        top: 64px;
+    }
     .recommend-container{
-        height: 550px;
+        height: 100%;
         overflow: hidden;
     }
     .song_title{

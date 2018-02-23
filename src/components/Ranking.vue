@@ -1,6 +1,6 @@
 <template>
-  <div>
-        <scroll class="rank-wrapper" :data="rankData">
+  <div class="rank" ref="rank">
+        <scroll class="rank-wrapper" :data="rankData" ref="ranklist">
             <ul class="rank-list">
                 <li @click="detailRanking(rankItem.id)" v-for="rankItem in rankData" :key="rankItem.id" class="rank-item">
                     <div class="left_item">
@@ -34,7 +34,10 @@
     import {ERR_OK} from '../api/config'
     import {getRanking,getChildRanking} from '../api/ranking'
     import Scroll from '../base/scroll'
+    import {playListMixin} from '../assets/js/mixin'
+    import { playMode } from '../assets/js/config';
     export default{
+        mixins: [playListMixin],
         data(){
             return {
                 rankData:[]
@@ -47,6 +50,11 @@
             this._jsonpRanking();
         },
         methods:{
+            handlePlaylist(playlist){
+                const bottom = playlist.length>0?'48px':'';
+                this.$refs.rank.style.bottom = bottom;
+                this.$refs.ranklist.refresh();
+            },
           _jsonpRanking(){
               getRanking().then(res=>{
                   if(res.body.code===ERR_OK){
@@ -74,15 +82,22 @@
     @rank-item-bgcolor:#ddd;
     @rank-item-color:#000;
     @rank-item-h:100px;
-    .rank-wrapper{
+    .rank{
+        position: fixed;
         width: 100%;
-        height: 800px;
+        top: 64px;
+        bottom: 0;
+    }
+    .rank-wrapper{
+        height: 100%;
+        width: 100%;
         box-sizing: border-box;
-        padding: 24px 18px;
         overflow: hidden;
         .rank-list{
             width: 100%;
-            height: 100;
+            height: auto;
+            box-sizing: border-box;
+            padding: 24px 18px;
             .rank-item{
                 position: relative;
                 width: 100%;

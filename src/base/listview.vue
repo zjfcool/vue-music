@@ -1,52 +1,56 @@
 <template>
-  <scroll 
-    @scroll="scroll"
-    :probeType="probeType" 
-    :listenScroll="listenScroll"
-    :data="data" 
-    class="singer-wrapper" 
-    ref="singerWarpper">
-      <ul class="singer-list" ref="list">
-          <li ref="listGroup" class="group" v-for="(groupData,index) in data" :key="index">
-              <h2>{{groupData.title}}</h2>
-              <ul>
-                  <li @click="singerDetail(item)" v-for="(item,index) in groupData.items" :key="index">
-                      <a>
-                          <img v-lazy="item.imgURL" alt="">
-                      </a>
-                      <span>{{item.name}}</span>
-                  </li>
-              </ul>
-          </li>
-      </ul>
-      <div class="list-shortcut" 
-            @touchstart.stop.prevent="shortcutToucStart"
-            @touchmove.stop.prevent="shortcutToucMove">
-          <ul>
-              <li 
-                v-for="(item,index) in shortcutList" 
-                :key="index" 
-                :data-index="index"
-                :class="{'active':currentIndex===index}">
-                  {{item}}
-              </li>
-          </ul>
-      </div>
-      <div ref="fixedTitle" class="fixed-head" v-show="fixedContent">
-          {{fixedContent}}
-      </div>
-      <div v-show="!data.length" class="loading-container">
-          <loading></loading>
-      </div>
-  </scroll>
+    <div class="singer" ref="singer">
+        <scroll 
+            @scroll="scroll"
+            :probeType="probeType" 
+            :listenScroll="listenScroll"
+            :data="data" 
+            class="singer-wrapper" 
+            ref="singerWarpper">
+            <ul class="singer-list" ref="list">
+                <li ref="listGroup" class="group" v-for="(groupData,index) in data" :key="index">
+                    <h2>{{groupData.title}}</h2>
+                    <ul>
+                        <li @click="singerDetail(item)" v-for="(item,index) in groupData.items" :key="index">
+                            <a>
+                                <img v-lazy="item.imgURL" alt="">
+                            </a>
+                            <span>{{item.name}}</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="list-shortcut" 
+                    @touchstart.stop.prevent="shortcutToucStart"
+                    @touchmove.stop.prevent="shortcutToucMove">
+                <ul>
+                    <li 
+                        v-for="(item,index) in shortcutList" 
+                        :key="index" 
+                        :data-index="index"
+                        :class="{'active':currentIndex===index}">
+                        {{item}}
+                    </li>
+                </ul>
+            </div>
+            <div ref="fixedTitle" class="fixed-head" v-show="fixedContent">
+                {{fixedContent}}
+            </div>
+            <div v-show="!data.length" class="loading-container">
+                <loading></loading>
+            </div>
+        </scroll>
+    </div>
 </template>
 <script>
     import Scroll from './scroll'
     import fDom from '../assets/js/dom'
     import Loading from '../base/loading/index'
+    import {playListMixin} from '../assets/js/mixin'
     const TITLE_HEIGHT=32;
     const PADDING=24;
     export default {
+        mixins:[playListMixin],
         created(){
             this.touch={};
             this.probeType = 3
@@ -84,6 +88,12 @@
             }
         },
         methods:{
+            handlePlaylist(playlist){
+                const bottom = playlist.length>0?'48px':'';
+                console.log(bottom)
+                this.$refs.singer.style.bottom=bottom;
+                this.$refs.singerWarpper.refresh();
+            },
             shortcutToucStart(e){
                 let anchorIndex = parseInt(fDom.getAttr(e.target,'data-index'));
                 let firstTouch = e.touches[0];
@@ -175,8 +185,14 @@
     @import '../assets/css/variable.less';
 
     @singer-list-h:60px;
+    .singer{
+        position: fixed;
+        top: 64px;
+        bottom: 0;
+        width: 100%;
+    }
     .singer-wrapper{
-        height: 500px;
+        height: 100%;
         overflow: hidden;
     }
     .loading-container{
@@ -217,8 +233,9 @@
                 &>li{
                     width: 100%;
                     height: @singer-list-h;
+                    // box-sizing: border-box;
                     .flex;
-                    margin-bottom: 8px;
+                    padding-bottom: 8px;
                     overflow: hidden;
                     a{
                         display: block;

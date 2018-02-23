@@ -4,23 +4,21 @@
       <img src="./assets/logo.png" width="32px" height="32px">
     </div>
     <nav-list></nav-list>
-    <transition 
-      enter-active-class="animated slideInLeft"
-      leave-active-class="animated slideOutRight"
-      mode="out-in">
-      <keep-alive>
-        <router-view/>
-      </keep-alive>
-    </transition>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
+    <player></player>
   </div>
 </template>
 
 <script>
 import NavList from '@/components/NavList'
+import Player from '@/components/player'
 export default {
   name: 'App',
   components:{
-    NavList
+    NavList,
+    Player
   }
 }
 </script>
