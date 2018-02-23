@@ -1,6 +1,7 @@
 import {playMode} from '../assets/js/config'
 const state = {
     singer:[],
+    ranking:[],
     playing:false,
     fullScreen:false,
     playlist:[],

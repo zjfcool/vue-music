@@ -22,6 +22,9 @@ const getters ={
     },
     getCurrentSong(state){
         return state.playlist[state.currentIndex]
+    },
+    getRanking(state){
+        return state.ranking;
     }
 }
 

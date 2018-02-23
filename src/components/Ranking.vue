@@ -2,7 +2,7 @@
   <div class="rank" ref="rank">
         <scroll class="rank-wrapper" :data="rankData" ref="ranklist">
             <ul class="rank-list">
-                <li @click="detailRanking(rankItem.id)" v-for="rankItem in rankData" :key="rankItem.id" class="rank-item">
+                <li @click="detailRanking(rankItem)" v-for="rankItem in rankData" :key="rankItem.id" class="rank-item">
                     <div class="left_item">
                         <a href="javascript:void(0);">
                             <img v-lazy="rankItem.picUrl" alt="">
@@ -26,8 +26,7 @@
                 </li>
             </ul>
         </scroll>
-        <router-view>
-        </router-view>
+        <router-view/>
   </div>
 </template>
 <script>
@@ -36,6 +35,8 @@
     import Scroll from '../base/scroll'
     import {playListMixin} from '../assets/js/mixin'
     import { playMode } from '../assets/js/config';
+    import {mapMutations} from 'vuex'
+    import * as types from '../store/mutationTypes'
     export default{
         mixins: [playListMixin],
         data(){
@@ -64,16 +65,26 @@
                   console.log(err)
               })
           },
-          detailRanking(id){
+          detailRanking(rankItem){
               this.$router.push({
-                  path:'/ranking/details'
+                  path:`/ranking/${rankItem.id}`
               })
-              getChildRanking(id).then(res=>{
-                  console.log(res.body)
-              },err=>{
-                  console.log(err);
-              })
-          }  
+              this.ranking(rankItem)
+            //   getChildRanking(id).then(res=>{
+            //       let songList = res.body.songlist;
+            //       let len = songList.length;
+            //       let songs=[];
+            //       for(let i=0;i<len;i++){
+            //           songs.push(createSong(songList[i].data))
+            //       }
+            //       this.ranking(songs);
+            //   },err=>{
+            //       console.log(err);
+            //   })
+          },
+          ...mapMutations({
+              'ranking':types.SET_RANKING
+          })  
         }
     }
 </script>

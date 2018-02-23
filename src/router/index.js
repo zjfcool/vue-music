@@ -38,7 +38,7 @@ export default new Router({
       component:Ranking,
       children:[
         {
-          path:'details',
+          path:':id',
           name:'DetailRanking',
           component:DetailRanking,
         }

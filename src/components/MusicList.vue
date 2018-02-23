@@ -152,7 +152,7 @@
     @import '../assets/css/variable.less';
     @import '../assets/css/func.less';
     .singer-detail{
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         bottom: 0;
