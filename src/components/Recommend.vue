@@ -69,6 +69,7 @@
                 getRecList().then(res=>{
                     if(res.body.code===ERR_OK){
                         this.recList=res.body.recomPlaylist.data.v_hot; 
+                        console.log(this.recList)
                     }
                 },err=>{
                     console.log(err);

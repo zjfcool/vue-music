@@ -5,7 +5,7 @@
   <transition 
         enter-active-class="animated slideInRight"
         leave-active-class="animated slideOutRight">
-        <music-list :data="detailRanking" :title="title" :bgImage="bgImage"></music-list>
+        <music-list :isRank="isRank" :data="detailRanking" :title="title" :bgImage="bgImage"></music-list>
     </transition>
 </template>
 <script>
@@ -19,7 +19,7 @@
                 return this.getRanking.topTitle
             },
             bgImage(){
-                return !this.getRanking.picUrl?"":this.getRanking.picUrl.trim();
+                return !this.imgurl?"":this.imgurl.trim();
             },
             ...mapGetters(['getRanking'])
         },
@@ -31,7 +31,9 @@
         },
         data(){
             return{
-                detailRanking:[]
+                detailRanking:[],
+                imgurl:'',
+                isRank:true
             }
         },
         methods:{
@@ -53,23 +55,16 @@
               })
             }
         },
+        watch:{
+            detailRanking(newVal){
+                this.imgurl=newVal[0].imgurl
+            }
+        },
         mounted(){
-            
-            
         }
     }
 </script>
 <style scoped lang="less" >
-    .detail-ranking{
-        position: fixed;
-        top:0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 9999;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,.6);
-    }
+    
 </style>
 

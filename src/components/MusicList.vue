@@ -24,7 +24,7 @@
             :data="data" 
             :listenScroll="listenScroll"
             ref="scroll">
-            <song-list :songs="data" @select="selectSong"></song-list>
+            <song-list :isRank="isRank" :songs="data" @select="selectSong"></song-list>
             <div v-show="!data.length" class="loading-container">
                 <loading></loading>
             </div>
@@ -54,8 +54,7 @@
         },
         computed: {
             bgStyle(){
-                return `background:url(${this.bgImage}) no-repeat top;
-                        background-size:100% auto;`
+                return `background:url(${this.bgImage}) no-repeat top;background-size:100%;`
             },
         },
         props:{
@@ -70,6 +69,10 @@
             bgImage:{
                 type:String,
                 default:''
+            },
+            isRank:{
+                type:Boolean,
+                default:false
             }
         },
         data(){
@@ -194,6 +197,7 @@
             height: 0;
             padding-top:70%;
             transform-origin:top;
+            background-size:100% auto;
             .play{
                 position: absolute;
                 bottom: 24px;

@@ -101,7 +101,6 @@
                 return this.getPlaylist;
             },
             currentSong(){
-                console.log(this.getCurrentSong)
                 return !this.getCurrentSong?{}:this.getCurrentSong;
             },
             cdCls(){
@@ -152,7 +151,6 @@
                 this.currentTime = e.target.currentTime;
             },
             isReadyPlay(){
-                console.log('ready play')
                 this.isReady=true
             },
             prev(){
@@ -171,7 +169,6 @@
                     if(!this.getPlaying){
                         this.isPlay()
                     }
-                    console.log(this.isReady)
                 }
                 this.isReady=false;
 
@@ -220,7 +217,6 @@
                 }else{
                     list = this.getSequenceList;
                 }
-                console.log(this.getSequenceList)
                 this.resetCurrentIndex(list);
                 this.setPlayList(list);
             },
@@ -253,10 +249,8 @@
                 this.timer=setTimeout(()=>{
                     this.$refs.audio.play();
                 },10)
-                console.log(newSong.id)
             },
             getPlaying(newVal){
-                console.log(newVal,'hh')
                 const audio = this.$refs.audio;
                 this.$nextTick(()=>{
                     newVal?audio.play():audio.pause();
