@@ -10,7 +10,7 @@
             v-for="(item,index) in searchResult" 
             :key="index"
             @click="setItem(item)">
-              <span :class="icon(item)">12</span>
+              <span :class="icon(item)"></span>
               <p v-html="getName(item)"></p>
           </li>
           <loading v-show="hasMore" title=""></loading>
@@ -149,6 +149,7 @@
 </script>
 <style lang="less" scoped>
     @import '../assets/css/variable.less';
+    @import '../assets/css/func.less';
     .suggest{
         height: 100%;
         width: 100%;
@@ -164,9 +165,19 @@
                 span{
                     width: 32px;
                     text-align: center;
+                    &.singer-icon{
+                        background: url(../assets/images/singer-icon.png) no-repeat center;
+                        background-size: 16px 16px;
+                    }
+                    &.song-icon{
+                        background: url(../assets/images/song-icon.png) no-repeat center;
+                        background-size: 16px 16px;
+                    }
                 }
                 p{
-                    color: @color-text-d; 
+                    flex: 1;
+                    color: @color-text-d;
+                    .textOverflow; 
                 }
             }
         }
