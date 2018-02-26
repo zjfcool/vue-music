@@ -10,8 +10,6 @@ export function getRanking (){
         jsonp:cb
     })
 }
-//&&&=4&_=1517991421278
-//inCharset=utf-8&outCharset=utf-8&notice=0&platform=h5&needNewCode=1&tpl=3&page=detail&type=top&topid=26&_=1517991903176
 export function getChildRanking(id){
     return Vue.http.jsonp('https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg',{
         params:Object.assign({},commonParams,{

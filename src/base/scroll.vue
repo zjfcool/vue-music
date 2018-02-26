@@ -40,6 +40,17 @@
             refreshDelay:{
                 type:Number,
                 default:20
+            },
+            /**
+             * 列表向上滚动加载
+             */
+            pullup:{
+                type:Boolean,
+                default:false
+            },
+            beforeScroll:{
+                type:Boolean,
+                default:false
             }
         },
         methods:{
@@ -55,6 +66,18 @@
                     let that=this;
                     this.scroll.on('scroll',(pos)=>{
                         that.$emit('scroll',pos);
+                    })
+                }
+                if(this.pullup){
+                    this.scroll.on('scrollEnd',()=>{
+                        if(this.scroll.y<=(this.scroll.maxScrollY+40)){
+                            this.$emit('scrollToEnd')
+                        }
+                    })
+                }
+                if(this.beforeScroll){
+                    this.scroll.on('beforeScrollStart',()=>{
+                        this.$emit('beforeScroll')
                     })
                 }
                 // console.log(this.scroll)

@@ -1,3 +1,5 @@
+import { clearTimeout } from "timers";
+
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
@@ -12,3 +14,15 @@ export function shuffle(arr) {
     }
     return _arr
 }
+export function debounce(func, delay,contxt) {
+    let timer
+  
+    return function (...args) {
+      if (timer) {
+        window.clearTimeout(timer)
+      }
+      timer = window.setTimeout(() => {
+        func.apply(contxt, args)
+      }, delay)
+    }
+  }
