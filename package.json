@@ -13,6 +13,7 @@
     "animate.css": "^3.5.2",
     "better-scroll": "^1.8.0",
     "fastclick": "^1.0.6",
+    "good-storage": "^1.0.1",
     "vue": "^2.5.2",
     "vue-awesome-swiper": "^3.1.2",
     "vue-lazyload": "^1.1.4",

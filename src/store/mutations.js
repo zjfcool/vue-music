@@ -24,6 +24,15 @@ const mutations = {
     },
     [types.SET_RANKING](state,arrData){
         state.ranking=arrData;
+    },
+    [types.SET_SEARCH_HISTORY](state,arrData){
+        state.searchHistory=arrData;
+    },
+    [types.SET_PLAY_HISTORY](state,arrData){
+        state.playHistroy=arrData;
+    },
+    [types.SET_FAVORITE_LIST](state,arrData){
+        state.favoriteList=arrData;
     }
 }
 

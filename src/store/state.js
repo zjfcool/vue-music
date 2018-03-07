@@ -1,4 +1,5 @@
 import {playMode} from '../assets/js/config'
+import {loadSearchHistory,loadPlayHistory,loadFavoriteSong} from '../assets/js/catch'
 const state = {
     singer:{},
     ranking:{},
@@ -8,8 +9,9 @@ const state = {
     sequenceList:[],
     mode:playMode.sequence,
     currentIndex:-1,
-    
-    
+    searchHistory:loadSearchHistory(),
+    playHistory:loadPlayHistory(),
+    favoriteList:loadFavoriteSong()
 }
 
 

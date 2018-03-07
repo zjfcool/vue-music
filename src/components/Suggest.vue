@@ -117,6 +117,7 @@
                 }
             },
             startScroll(){
+                // 手机端滚动时隐藏掉输入键盘
                 this.$emit('beforeScroll');
             },
             setItem(item){
@@ -132,6 +133,8 @@
                 }else{
                     this.insertSong(item)
                 }
+                
+                this.$emit('select',this.query)
             },
             ...mapMutations({
                 setSinger:types.SINGER_LIST

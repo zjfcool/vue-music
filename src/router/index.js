@@ -1,12 +1,41 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Recommend from '@/components/Recommend'
-import Singer from '@/components/Singer'
-import Ranking from '@/components/Ranking'
-import Search from '@/components/Search'
-import DetailRanking from '@/components/DetailRanking'
-import DetailSinger from '@/components/DetailSinger'
-
+// 按需加载
+const Recommend = resolve=>{
+  import('@/components/Recommend').then(module=>{
+    resolve(module);
+  })
+}
+const Singer = resolve=>{
+  import('@/components/Singer').then(module=>{
+    resolve(module);
+  })
+}
+const Ranking = resolve=>{
+  import('@/components/Ranking').then(module=>{
+    resolve(module);
+  })
+}
+const Search = resolve=>{
+  import('@/components/Search').then(module=>{
+    resolve(module);
+  })
+}
+const DetailRanking = resolve=>{
+  import('@/components/DetailRanking').then(module=>{
+    resolve(module);
+  })
+}
+const DetailSinger = resolve=>{
+  import('@/components/DetailSinger').then(module=>{
+    resolve(module);
+  })
+}
+const Admin = resolve=>{
+  import('@/components/Admin').then(module=>{
+    resolve(module);
+  })
+}
 Vue.use(Router)
 
 export default new Router({
@@ -15,6 +44,10 @@ export default new Router({
     {
       path: '/',
       redirect:'/recommend'
+    },
+    {
+      path:'/admin',
+      component:Admin
     },
     {
       path:'/recommend',
@@ -52,7 +85,7 @@ export default new Router({
       children:[
         {
           path:':id',
-          name:'DetailSinger',
+          name:'DetailSinger2',
           component:DetailSinger
         }
       ]

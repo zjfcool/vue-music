@@ -25,6 +25,15 @@ const getters ={
     },
     getRanking(state){
         return state.ranking;
+    },
+    getSearchHistory(state){
+        return state.searchHistory;
+    },
+    getPlayHistory(state){
+        return state.playHistory;
+    },
+    getFavoriteList(state){
+        return state.favoriteList;
     }
 }
 
