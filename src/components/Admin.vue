@@ -14,12 +14,12 @@
             <span>随机播放全部歌曲</span>
         </div>
         <div class="list-wrapper" ref="listWrapper">
-            <scroll ref="favoriteList" :data="getFavoriteList" class="list-scroll" v-show="activeIndex===0">
+            <scroll ref="favoriteList" :data="getFavoriteList" class="list-scroll" v-if="activeIndex===0">
                 <div class="list-inner">
                     <song-list :songs="getFavoriteList" @select="selectSong"></song-list>
                 </div>
             </scroll>
-            <scroll ref="playHistory" :data="playHistory" class="list-scroll" v-show="activeIndex===1">
+            <scroll ref="playHistory" :data="playHistory" class="list-scroll" v-if="activeIndex===1">
                 <div class="list-inner">
                     <song-list :songs="playHistory" @select="selectSong"></song-list>
                 </div>
@@ -34,7 +34,9 @@
     import {mapGetters,mapActions} from 'vuex'
     import SongList from '@/base/songlist'
     import {playListMixin} from '@/assets/js/mixin'
+    import Songs from '../assets/js/songs'
     export default{
+        mixins: [playListMixin],
         data(){
             return {
                 switches:[
@@ -58,33 +60,33 @@
         methods:{
             handlePlaylist(playlist){
                 const bottom = playlist.length>0?'60px':'';
+                console.log(bottom)
                 this.$refs.listWrapper.style.bottom=bottom;
-                this.$refs.playHistory.refresh();
-                this.$refs.favoriteList.refresh();
+               
+                this.$refs.favoriteList&&this.$refs.favoriteList.refresh();
+                this.$refs.playHistory&&this.$refs.playHistory.refresh();
             },
             back(){
                 this.$router.back();
             },
             active(index){
                 this.activeIndex=index;
-                if(index===0){
-                    this.$refs.favoriteList.refresh();
-                }else{
-                    this.$refs.playHistory.refresh();
-                }
             },
             selectSong(item,index){
-                this.insertSong(item);
+                this.insertSong(new Songs(item));
             },
             playRandom(){
                 let list = this.activeIndex===0?this.getFavoriteList:this.playHistory;
+                for(let i=0;i<list.length;i++){
+                    list[i]=new Songs(list[i])
+                }
                 this.randomPlay({list});
             },
             ...mapActions([
                 'insertSong',
                 'randomPlay'
             ])
-        }
+        },
     }
 </script>
 <style lang="less" scoped>

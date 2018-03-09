@@ -36,10 +36,15 @@ const Admin = resolve=>{
     resolve(module);
   })
 }
+const RecommendDetail = resolve=>{
+  import('@/components/RecommendDetail').then(module=>{
+    resolve(module)
+  })
+}
 Vue.use(Router)
 
 export default new Router({
-  mode:'history',
+  mode:'hash',
   routes: [
     {
       path: '/',
@@ -52,7 +57,13 @@ export default new Router({
     {
       path:'/recommend',
       name:"Recommend",
-      component:Recommend
+      component:Recommend,
+      children:[
+        {
+          path:':id',
+          component:RecommendDetail
+        }
+      ]
     },
     {
       path:'/singer',

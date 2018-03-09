@@ -3,6 +3,7 @@ import {loadSearchHistory,loadPlayHistory,loadFavoriteSong} from '../assets/js/c
 const state = {
     singer:{},
     ranking:{},
+    detailRec:{},
     playing:false,
     fullScreen:false,
     playlist:[],

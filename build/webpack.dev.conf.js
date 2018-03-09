@@ -9,6 +9,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
+const express = require('express');
+const app = express();
+const router = express.Router();
+const axios = require('axios');
+app.use('/api',router);
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -42,6 +47,42 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,
+    },
+    before(app){
+      app.get('/api/disc',(req,res)=>{
+        var url='https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg';
+        axios.get(url,{
+          headers: {
+            referer: 'https://y.qq.com/w/taoge.html?ADTAG=newyqq.taoge&id=3763712896',
+            host : 'c.y.qq.com',
+            origin:'https://c.y.qq.com/'
+          },
+          params: req.query
+        }).then(result=>{
+          res.json(result.data)
+        })
+      });
+      app.get('/api/lyric',(req,res)=>{
+        var url="https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg";
+        axios.get(url,{
+          headers:{
+            host : 'c.y.qq.com',
+            referer:'https://y.qq.com/portal/player.html',
+            origin:'https://c.y.qq.com/'
+          },
+          params:req.query
+        }).then(result=>{
+          var ret=result.data;
+          if (typeof ret === 'string') {
+            var reg = /^\w+\(({[^()]+})\)$/
+            var matches = ret.match(reg)
+            if (matches) {
+              ret = JSON.parse(matches[1])
+            }
+          }
+          res.json(ret);
+        })
+      })
     }
   },
   plugins: [

@@ -34,6 +34,9 @@ const getters ={
     },
     getFavoriteList(state){
         return state.favoriteList;
+    },
+    getRecommend(state){
+        return state.detailRec;
     }
 }
 

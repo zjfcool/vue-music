@@ -33,6 +33,9 @@ const mutations = {
     },
     [types.SET_FAVORITE_LIST](state,arrData){
         state.favoriteList=arrData;
+    },
+    [types.SET_DETAIL_REC](state,obj){
+        state.detailRec=obj;
     }
 }
 

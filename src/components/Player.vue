@@ -21,6 +21,9 @@
                             <div class="cd" :class="cdCls">
                                 <img :src="currentSong.imgurl" alt="">
                             </div>
+                            <div class="cd-text" v-show="currentLyric">
+                              {{playingLyric}}
+                            </div>
                         </div>
                     </div>
                 </transition>
@@ -28,7 +31,13 @@
                     enter-active-class="animated fadeIn"
                     leave-active-class="animated fadeOut">
                     <div class="middle-r" v-if="!isShowCD">
-                        歌词界面
+                        <scroll class="lyric-scroll" :data="currentLyric&&currentLyric.lines" ref="lyricScroll">
+                          <div class="lyric-wrapper">
+                            <div  v-if="currentLyric">
+                              <p ref="lyricLine" v-for="(item,index) in currentLyric.lines" :class="{'active':index===currentLineNum}" :key="index">{{item.txt}}</p>
+                            </div>
+                          </div>
+                        </scroll>
                     </div>
                 </transition>
                 
@@ -87,13 +96,15 @@ import { playMode } from "../assets/js/config";
 import ProgressCircle from "../base/progressCircle";
 import PlayList from "./PlayList";
 import {playerMixin} from '../assets/js/mixin'
-
+import Lyric from 'lyric-parser'
+import Scroll from '../base/scroll'
 export default {
   mixins:[playerMixin],
   components: {
     ProgressBar,
     ProgressCircle,
     PlayList,
+    Scroll
   },
   computed: {
     fullScreen() {
@@ -119,6 +130,9 @@ export default {
       isReady: false,
       edge: 32,
       isShowCD: true,
+      currentLyric:null,
+      playingLyric:'',
+      currentLineNum:0
     };
   },
   methods: {
@@ -136,6 +150,9 @@ export default {
         return;
       }
       this.setPlaying(!this.getPlaying);
+      if(this.currentLyric){
+        this.currentLyric.togglePlay();
+      }
     },
     updateTime(e) {
       this.currentTime = e.target.currentTime;
@@ -186,6 +203,9 @@ export default {
       this.$refs.audio.currentTime = 0;
       this.$refs.audio.play();
       this.setPlaying(true);
+      if(this.currentLyric){
+        this.currentLyric.seek(0);
+      }
     },
     end() {
       if (this.getMode === playMode.loop) {
@@ -197,9 +217,40 @@ export default {
     percentChange(percent) {
       this.currentTime = this.currentSong.duration * percent;
       this.$refs.audio.currentTime = this.currentTime;
+      // console.log(this.currentTime)
+      this.currentLyric&&this.currentLyric.seek(this.currentTime*1000);
     },
     toggleShowMiddle() {
       this.isShowCD = !this.isShowCD;
+    },
+    getLyric(){
+      this.currentSong.getCurrentLyric().then(lyric=>{
+        if(this.currentSong.lyric!==lyric){
+          return;
+        }
+         this.currentLyric = new Lyric(lyric,this.handlerLyric);
+         if(this.getPlaying){
+           this.currentLyric.play()
+         }
+      }).catch(()=>{
+        this.currentLyric=null;
+        this.playingLyric="";
+        this.currentLineNum=0;
+      })
+    },
+    handlerLyric({lineNum, txt}){
+      this.currentLineNum=lineNum;
+      // 歌词页面显示的时候
+      if(!this.isShowCD){
+        if(lineNum>5){
+          let lineEl=this.$refs.lyricLine[lineNum-5];
+          this.$refs.lyricScroll.scrollToElement(lineEl,1000);
+        }else{
+          this.$refs.lyricScroll.scrollTo(0,0,1000)
+        }
+      }
+      
+      this.playingLyric=txt;
     },
     ...mapMutations({
       setFullScreen: types.SET_FULLSCREEN,
@@ -217,16 +268,30 @@ export default {
       if (newSong.id === oldSong.id) {
         return;
       }
+      if(this.currentLyric){
+        this.currentLyric.stop();
+        this.currentLineNum=0;
+        this.playingLyric="";
+        this.currentTime=0;
+      }
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
         this.$refs.audio.play();
-      }, 10);
+        this.getLyric();
+      }, 1000);
     },
     getPlaying(newVal) {
       const audio = this.$refs.audio;
       this.$nextTick(() => {
         newVal ? audio.play() : audio.pause();
       });
+    },
+    fullScreen(newVal){
+      if(newVal&&!this.isShowCD){
+        setTimeout(()=>{
+          this.$refs.lyricScroll.refresh();
+        },20)
+      }
     }
   }
 };
@@ -417,6 +482,12 @@ export default {
             border-radius: 50%;
           }
         }
+        .cd-text{
+          width: 100%;
+          height: 32px;
+          text-align: center;
+          line-height: 32px;
+        }
       }
     }
     .middle-r {
@@ -428,13 +499,28 @@ export default {
       display: inline-block;
       overflow: hidden;
       vertical-align: top;
+      .lyric-scroll{
+        height: 100%;
+        overflow: hidden;
+        .lyric-wrapper{
+          p{
+            text-align: center;
+            color: @color-text-l;
+            box-sizing: border-box;
+            padding: 12px 0;
+            &.active{
+              color: @color-text;
+            }
+          }
+        }
+      }
     }
   }
   .mini-screen {
     position: fixed;
     left: 0;
     bottom: 0;
-    background: @bg-color;
+    background: @box-color;
     z-index: 99999;
     height: @play-btn-group-height;
     width: 100%;
@@ -448,7 +534,9 @@ export default {
         display: inline-block;
         width: 100%;
         height: 100%;
+        box-sizing: border-box;
         border-radius: 50%;
+        padding: 4px;
       }
     }
     .text {

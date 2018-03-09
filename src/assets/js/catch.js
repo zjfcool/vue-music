@@ -56,7 +56,6 @@ export function clearSearchHistory(){
 }
 // 获取播放历史
 export function loadPlayHistory(){
-    console.log(storage.get(PLAY_KEY,[]))
     return storage.get(PLAY_KEY,[])
 }
 // 添加播放历史
@@ -66,7 +65,6 @@ export function savePlayHistory(song){
         return item.id===song.id;
     },PLAY_MAX_LEN);
     storage.set(PLAY_KEY,plays);
-    console.log(plays)
     return plays;
 }
 // 删除喜欢歌曲

@@ -82,7 +82,8 @@
         },
         methods:{
             handlePlaylist(playlist){
-                const bottom = playlist>0?'48px':'';
+                const bottom = playlist.length>0?'48px':'';
+                console.log(bottom,)
                 this.$refs.scroll.$el.style.bottom=bottom;
                 this.$refs.scroll.refresh();
             },
@@ -143,11 +144,9 @@
             this.imgH = this.$refs.header.clientHeight;
             this.totalH = this.$refs.singerDetail.clientHeight;
             this.$refs.layer.style.top=this.$refs.scroll.$el.style.top=this.imgH+'px';
-            this.$refs.scroll.$el.style.height=this.totalH-this.imgH+'px';
+            // this.$refs.scroll.$el.style.height=this.totalH-this.imgH+'px';
             // 向上滑动最大距离
             this.maxTranslateY=-this.imgH+RESET_HEIGHT;
-            
-            
         }
     }
 </script>
@@ -233,6 +232,7 @@
             position: absolute;
             width: 100%;
             box-sizing: border-box;
+            bottom: 0;
             padding: 8px 0;
             .loading-container{
                 width: 100%;

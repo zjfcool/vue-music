@@ -5,7 +5,7 @@
                 <slider @load-image="loadImage" :sliderData="sliderData" ></slider>
                 <h3 class="song_title">热门歌曲推荐</h3>
                 <ul class="rec-list">
-                    <li class="rec-item" v-for="(item,index) in recList" :key="index">
+                    <li class="rec-item" v-for="(item,index) in recList" :key="index" @click="recDetail(item)">
                         <div class="left-item">
                                 <a class="img_container" href="javascript:void(0);">
                                     <img v-lazy="item.cover" alt="">
@@ -23,6 +23,7 @@
                 </div>
         </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 <script>
@@ -31,6 +32,7 @@
     import {getRecommend,getRecList} from '../api/recommend'
     import Scroll from '../base/scroll'
     import Loading from '../base/loading/index'
+    import {mapMutations} from 'vuex'
     import {playListMixin} from '../assets/js/mixin'
     export default {
         name:'Recommend',
@@ -56,6 +58,12 @@
                 this.$refs.recommond.style.bottom=bottom;
                 this.$refs.recommendContainer.refresh();
             },
+            recDetail(item){
+                this.$router.push({
+                    path:`/recommend/${item.id}`
+                })
+                this.setRecommend(item);
+            },
             _jsonpRecommend(){
                 getRecommend().then(res=>{
                     if(res.body.code===ERR_OK){
@@ -76,7 +84,10 @@
             },
             loadImage(){
                 this.$refs.recommendContainer.refresh();
-            }
+            },
+            ...mapMutations({
+                setRecommend:'SET_DETAIL_REC'
+            })
         }
     }
 </script>
