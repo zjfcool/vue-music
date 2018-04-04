@@ -1,4 +1,5 @@
 const express = require('express');
+const compression = require('compression');
 const config = require('./config/index');
 const axios = require('axios');
 
@@ -41,8 +42,11 @@ router.get('/disc',(req,res)=>{
       res.json(ret);
     })
   })
+// 启用gzip
+app.use(compression());
 app.use('/api',router);
 app.use(express.static('./dist'));
+
 module.exports=app.listen(port,(err)=>{
     if(err){
         console.log(err);
