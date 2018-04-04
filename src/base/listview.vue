@@ -90,7 +90,6 @@
         methods:{
             handlePlaylist(playlist){
                 const bottom = playlist.length>0?'48px':'';
-                console.log(bottom)
                 this.$refs.singer.style.bottom=bottom;
                 this.$refs.singerWarpper.refresh();
             },

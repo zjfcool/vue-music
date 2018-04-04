@@ -60,7 +60,6 @@
         methods:{
             handlePlaylist(playlist){
                 const bottom = playlist.length>0?'60px':'';
-                console.log(bottom)
                 this.$refs.listWrapper.style.bottom=bottom;
                
                 this.$refs.favoriteList&&this.$refs.favoriteList.refresh();

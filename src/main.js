@@ -17,7 +17,6 @@ Vue.use(VueLazyLoad,{
   loading: require('./assets/logo.png')
 })
 FastClick.attach(document.body);
-console.log(1)
 Vue.filter('initNum',(val)=>{
   return val>10000?(Math.round(val/1000)/10)+'万':val;
 });
